@@ -31,7 +31,9 @@ class LoadVideo(Stage):
         Return: downsampled frames [t x H x W x C]
         """
         # TODO: downsample the frames to self.target_frame_rate
-        raise NotImplementedError
+        target_frame_rate = self.target_frame_rate
+        factor = int(frame_rate / target_frame_rate)
+        return frames[::factor]
 
     def process(self, task):
         task.start(self)

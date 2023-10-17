@@ -54,7 +54,24 @@ class CNNFeature(Stage):
         # Then apply self.transforms to batch to get model input.
         # Finally apply self.model on the input to get features.
         # Wrap the model with torch.no_grad() to avoid OOM.
-        raise NotImplementedError
+        
+        # Convert frames to float and normalize to [0, 1]
+        frames = frames.float() / 255.0
+        
+        # Convert to [B x C x H x W] format expected by PyTorch
+        frames = frames.permute(0, 3, 1, 2)
+        
+        # Apply any necessary input transforms (if applicable)
+        # frames = self.transforms(frames)
+        
+        # Ensure model is in evaluation mode and on the correct device
+        self.model.eval().to(self.device)
+        
+        # Apply the model to the input frames with torch.no_grad() to avoid OOM
+        with torch.no_grad():
+            features = self.model(frames.to(self.device))
+        
+        return features.squeeze()  # Assuming features is [B x D], remove batch dimension
 
     def process(self, task):
         task.start(self)

@@ -36,7 +36,16 @@ class CNN3DFeature(Stage):
                 self.device = 'cpu'
                 self.logger.warn('No available GPUs, running on CPU.')
             # TODO: build 3D CNN model with weights and input transforms
-            raise NotImplementedError
+            # self.model = getattr(video_models, self.model_name)(pretrained=False)
+            # state_dict = torch.load(self.weight_name)
+            # self.model.load_state_dict(state_dict)
+            # self.model = create_feature_extractor(self.model, self.node_name)
+            #self.model = self.model.to(self.device).eval()
+            weights = getattr(models, self.weight_name).DEFAULT
+            self.transforms = weights.transforms()
+            base_model = getattr(models, self.model_name)(weights=weights)
+            self.model = create_feature_extractor(
+                base_model, {self.node_name: 'feature'})
             self.model = self.model.to(self.device).eval()
 
     def extract_cnn3d_features(self, clip: torch.Tensor) -> torch.Tensor:
@@ -50,7 +59,16 @@ class CNN3DFeature(Stage):
         # Then apply self.transforms to batch to get model input.
         # Finally apply self.model on the input to get features.
         # Wrap the model with torch.no_grad() to avoid OOM.
-        raise NotImplementedError
+        clip = clip.unsqueeze(0).permute(0, 4, 1, 2, 3).to(self.device)
+        
+        # Apply the model
+        with torch.no_grad():
+            features = self.model(clip)
+        
+        # Reshape to [D]
+        features = features.squeeze().cpu()
+        
+        return features
 
     def process(self, task):
         task.start(self)

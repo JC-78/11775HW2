@@ -29,7 +29,17 @@ class BagOfWords(Stage):
         # TODO: Generate bag of words
         # Calculate pairwise distance between each feature and each cluster,
         # assign each feature to the nearest cluster, and count
-        raise NotImplementedError
+        
+        # Calculate pairwise distance between each feature and each cluster
+        distances = np.linalg.norm(features[:, None] - self.weight[None], axis=-1)
+        
+        # Assign each feature to the nearest cluster
+        nearest_cluster = np.argmin(distances, axis=1)
+        
+        # Count the frequency of each cluster
+        word_counts = np.bincount(nearest_cluster, minlength=len(self.weight))
+        
+        return word_counts
 
     def get_video_feature(self, bags: np.ndarray) -> np.ndarray:
         """
@@ -38,7 +48,11 @@ class BagOfWords(Stage):
         Return: pooled vector, [W]
         """
         # TODO: Aggregate frame-level bags into a video-level feature.
-        raise NotImplementedError
+        # Aggregate frame-level bags into a video-level feature
+        # For example, you can use sum or average pooling
+        video_feature = np.mean(bags, axis=0)  # Use np.sum for sum pooling
+        
+        return video_feature
 
     def process(self, task):
         features = task.content

@@ -29,7 +29,16 @@ class SIFTFeature(Stage):
         # TODO: Extract SIFT feature for the current frame
         # Use self.sift.detectAndCompute
         # Remember to handle when it returns None
-        raise NotImplementedError
+        gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+    
+        # Detect keypoints and compute descriptors
+        keypoints, descriptors = self.sift.detectAndCompute(gray_frame, None)
+
+        # Handle when there are no keypoints
+        if descriptors is None:
+            return np.zeros((0, 128), dtype=np.float32)
+
+        return descriptors
 
     def process(self, task):
         task.start(self)
