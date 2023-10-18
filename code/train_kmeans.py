@@ -20,8 +20,13 @@ def select_features(features: List[np.ndarray]) -> np.ndarray:
     Return: selected features, [n x D]
     """
     # TODO: select subset of features for clustering
-    raise NotImplementedError
-
+    num_selected = int(0.8 * len(features))
+    
+    # Randomly select 'num_selected' features from the list
+    selected_indices = np.random.choice(len(features), size=num_selected, replace=False)
+    selected_features = [features[i] for i in selected_indices]
+    
+    return np.concatenate(selected_features, axis=0)
 
 def worker(video_id, *, args):
     feature_path = osp.join(args.feature_dir, f'{video_id}.pkl')
