@@ -22,8 +22,11 @@ def select_features(features: List[np.ndarray]) -> np.ndarray:
     # TODO: select subset of features for clustering
     num_selected = int(0.8 * len(features))
     
-    # Randomly select 'num_selected' features from the list
     selected_indices = np.random.choice(len(features), size=num_selected, replace=False)
+    
+    if len(selected_indices) == 0:
+        return np.empty((0, features[0].shape[1]))  # Return an empty array
+    
     selected_features = [features[i] for i in selected_indices]
     
     return np.concatenate(selected_features, axis=0)
