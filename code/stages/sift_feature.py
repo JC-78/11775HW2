@@ -30,9 +30,12 @@ class SIFTFeature(Stage):
         # Use self.sift.detectAndCompute
         # Remember to handle when it returns None
         gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-    
-        # Detect keypoints and compute descriptors
-        keypoints, descriptors = self.sift.detectAndCompute(gray_frame, None)
+
+        # Uniformly downsample the frame to reduce computation
+        downsampled_frame = gray_frame[::2, ::2]
+
+        # Detect keypoints and compute descriptors on the downsampled frame
+        keypoints, descriptors = self.sift.detectAndCompute(downsampled_frame, None)
 
         # Handle when there are no keypoints
         if descriptors is None:
