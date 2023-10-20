@@ -70,6 +70,8 @@ class CNNFeature(Stage):
         # Wrap the model with torch.no_grad() to avoid OOM
         with torch.no_grad():
             features = self.model(frames.to(self.device))
+        print("features dictionary",features)
+        features = output['feature']
         
         return features
 
