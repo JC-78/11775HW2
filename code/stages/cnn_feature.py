@@ -61,13 +61,13 @@ class CNNFeature(Stage):
         # Convert to [B x C x H x W] format expected by PyTorch
         frames = frames.permute(0, 3, 1, 2)
         
-        # Apply any necessary input transforms (if applicable)
-        # frames = self.transforms(frames)
+        # Apply self.transforms to batch to get model input.
+        frames = self.transforms(frames)
         
-        # Ensure model is in evaluation mode and on the correct device
+        # Ensure model is in evaluation mode and on the correct device.
         self.model.eval().to(self.device)
         
-        # Apply the model to the input frames with torch.no_grad() to avoid OOM
+        # Wrap the model with torch.no_grad() to avoid OOM
         with torch.no_grad():
             features = self.model(frames.to(self.device))
         
