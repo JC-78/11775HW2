@@ -28,7 +28,7 @@ class FeatureDataset(Dataset):
         Return: [D]
         """
         # TODO: aggregate feature by max or average pooling
-        raise NotImplementedError
+        return np.mean(frame_features, axis=0)
 
     def __getitem__(self, idx):
         item = self.df.iloc[idx]
