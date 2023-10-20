@@ -71,7 +71,7 @@ class CNNFeature(Stage):
         with torch.no_grad():
             features = self.model(frames.to(self.device))
         
-        return features.squeeze()  # Assuming features is [B x D], remove batch dimension
+        return features
 
     def process(self, task):
         task.start(self)
