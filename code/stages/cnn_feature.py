@@ -71,7 +71,7 @@ class CNNFeature(Stage):
         with torch.no_grad():
             features = self.model(frames.to(self.device))
         print("features dictionary",features)
-        features = output['feature']
+        features = features['feature']
         
         return features
 
