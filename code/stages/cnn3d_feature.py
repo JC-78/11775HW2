@@ -52,13 +52,13 @@ class CNN3DFeature(Stage):
             # weights=video_models.video_r3d_18(pretrained=True)
             # self.transforms = weights.transforms()
             base_model=getattr(video_models, self.model_name)(pretrained=True)
-            # self.model = create_feature_extractor(
-            #     base_model, {self.node_name: 'feature'})
+            self.model = create_feature_extractor(
+                base_model, {self.node_name: 'feature'})
             # Check if the model has transforms attribute
-            if hasattr(base_model, 'transforms'):
-                self.transforms = base_model.transforms
-            else:
-                self.transforms = None
+            # if hasattr(base_model, 'transforms'):
+            #     self.transforms = base_model.transforms
+            # else:
+            #     self.transforms = None
             self.model = base_model.to(self.device).eval()
 
     def extract_cnn3d_features(self, clip: torch.Tensor) -> torch.Tensor:
@@ -72,23 +72,12 @@ class CNN3DFeature(Stage):
         # Then apply self.transforms to batch to get model input.
         # Finally apply self.model on the input to get features.
         # Wrap the model with torch.no_grad() to avoid OOM.
-        
-        clip = clip.float() / 255.0
-        #dealing with a single clip at a time, so the batch dimension (B) is already 1
-        clip = clip.permute(0, 3, 1, 2)
-        
-        # Apply transforms
-        if self.transforms!=None:
-            clip = self.transforms(clip)
-        
-        # Ensure model is in evaluation mode and on the correct device
-        self.model.eval().to(self.device)
-        
-        # Wrap the model with torch.no_grad() to avoid OOM
         with torch.no_grad():
-            features = self.model(clip.to(self.device))
-        
-        return features['feature'].squeeze()
+            clip=clip.permute(3,0,1,2).unsqueeze(0)
+            clip=clip.float()/255.0
+            clip=clip[:,:,::10,::10,::10]
+            features=self.model(clip)['feature'].squeeze(0)
+        return features
 
     def process(self, task):
         task.start(self)
