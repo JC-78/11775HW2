@@ -9,7 +9,7 @@ from sklearn.ensemble import RandomForestClassifier
 
 data=[]
 labels=[]
-train_val_df = pd.read_csv('train_val.csv')
+train_val_df = pd.read_csv("data/labels/train_val.csv")
 
 for index,row in train_val_df.iterrows():
     filename=row[0]
