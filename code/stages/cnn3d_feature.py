@@ -36,13 +36,20 @@ class CNN3DFeature(Stage):
                 self.device = 'cpu'
                 self.logger.warn('No available GPUs, running on CPU.')
             # TODO: build 3D CNN model with weights and input transforms
-            # weights = getattr(video_models, self.weight_name).pretrained
-            # self.transforms = weights.transforms
-            # base_model = getattr(video_models, self.model_name)(pretrained=True)
+
+            #from cnn_feature
+            # weights = getattr(models, self.weight_name).DEFAULT
+            # self.transforms = weights.transforms()
+            # base_model = getattr(models, self.model_name)(weights=weights)
             # self.model = create_feature_extractor(
             #     base_model, {self.node_name: 'feature'})
             # self.model = self.model.to(self.device).eval()
-            self.model = getattr(video_models, self.model_name)(pretrained=True)
+
+            self.weights = getattr(video_models, self.weight_name)
+            self.transforms = self.weights.transforms
+            base_model=getattr(video_models, self.model_name)(pretrained=True)
+            self.model = create_feature_extractor(
+                base_model, {self.node_name: 'feature'})
             self.model = self.model.to(self.device).eval()
 
     def extract_cnn3d_features(self, clip: torch.Tensor) -> torch.Tensor:
@@ -56,15 +63,15 @@ class CNN3DFeature(Stage):
         # Then apply self.transforms to batch to get model input.
         # Finally apply self.model on the input to get features.
         # Wrap the model with torch.no_grad() to avoid OOM.
-        clip = clip.float() / 255.0
         
-        # Convert to [1 x T x C x H x W] format expected by PyTorch
+        clip = clip.float() / 255.0
+        #dealing with a single clip at a time, so the batch dimension (B) is already 1
         clip = clip.permute(0, 3, 1, 2)
         
-        # Apply self.transforms to clip to get model input.
+        # Apply transforms
         clip = self.transforms(clip)
         
-        # Ensure model is in evaluation mode and on the correct device.
+        # Ensure model is in evaluation mode and on the correct device
         self.model.eval().to(self.device)
         
         # Wrap the model with torch.no_grad() to avoid OOM
