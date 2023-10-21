@@ -59,7 +59,7 @@ class CNN3DFeature(Stage):
                 self.transforms = base_model.transforms
             else:
                 self.transforms = None
-            self.model = self.model.to(self.device).eval()
+            self.model = base_model.to(self.device).eval()
 
     def extract_cnn3d_features(self, clip: torch.Tensor) -> torch.Tensor:
         """
