@@ -37,7 +37,7 @@ print("predicting")
 pred = rf_classifier.predict(test_data)
 
 pred=np.array(pred)
-result_df=pd.Dataframe({
+result_df=pd.DataFrame({
     'Id':test_df['Id'],
     'category':pred
 })
