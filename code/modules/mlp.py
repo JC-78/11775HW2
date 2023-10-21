@@ -19,7 +19,10 @@ class MlpClassifier(pl.LightningModule):
         layers = [
             nn.Linear(self.hparams.num_features, 512),  # Example hidden layer with 512 units
             nn.ReLU(),
-            nn.Linear(512, self.hparams.num_classes)  # Output layer with num_classes units
+            nn.Linear(512,512),
+            nn.ReLU(),
+            nn.Linear(512,256),
+            nn.Linear(256, self.hparams.num_classes)  # Output layer with num_classes units
         ]
         self.model = nn.Sequential(*layers)
         self.loss = nn.CrossEntropyLoss()
