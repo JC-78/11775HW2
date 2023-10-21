@@ -49,11 +49,16 @@ class CNN3DFeature(Stage):
             # self.transforms = self.weights.transforms
             # weights = getattr(video_models, self.weight_name)(pretrained=True)
             #weights = self.weight_name.DEFAULT
-            weights=video_models.video_r3d_18(pretrained=True)
-            self.transforms = weights.transforms()
+            # weights=video_models.video_r3d_18(pretrained=True)
+            # self.transforms = weights.transforms()
             base_model=getattr(video_models, self.model_name)(pretrained=True)
-            self.model = create_feature_extractor(
-                base_model, {self.node_name: 'feature'})
+            # self.model = create_feature_extractor(
+            #     base_model, {self.node_name: 'feature'})
+            # Check if the model has transforms attribute
+            if hasattr(base_model, 'transforms'):
+                self.transforms = base_model.transforms
+            else:
+                self.transforms = None
             self.model = self.model.to(self.device).eval()
 
     def extract_cnn3d_features(self, clip: torch.Tensor) -> torch.Tensor:
@@ -73,7 +78,8 @@ class CNN3DFeature(Stage):
         clip = clip.permute(0, 3, 1, 2)
         
         # Apply transforms
-        clip = self.transforms(clip)
+        if self.transforms!=None:
+            clip = self.transforms(clip)
         
         # Ensure model is in evaluation mode and on the correct device
         self.model.eval().to(self.device)
