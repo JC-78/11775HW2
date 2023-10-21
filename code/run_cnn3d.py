@@ -34,9 +34,9 @@ class ExtractCNN3DFeature(System):
                       batch_size=self.args.clip_duration),
             CNN3DFeature(cnn_resources,
                          # TODO: choose the model, weight, and node to use
-                         model_name='',
-                         weight_name='',
-                         node_name='',
+                         model_name='r3d_18',
+                         weight_name='r3d_18',
+                         node_name='layer4',
                          replica_per_gpu=self.args.replica_per_gpu),
             SaveFeature(io_resources, feature_dir=self.args.cnn_dir),
         ]
