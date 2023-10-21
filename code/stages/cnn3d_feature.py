@@ -36,16 +36,13 @@ class CNN3DFeature(Stage):
                 self.device = 'cpu'
                 self.logger.warn('No available GPUs, running on CPU.')
             # TODO: build 3D CNN model with weights and input transforms
-            # self.model = getattr(video_models, self.model_name)(pretrained=False)
-            # state_dict = torch.load(self.weight_name)
-            # self.model.load_state_dict(state_dict)
-            # self.model = create_feature_extractor(self.model, self.node_name)
-            #self.model = self.model.to(self.device).eval()
-            weights = getattr(video_models, self.weight_name).pretrained
-            self.transforms = weights.transforms
-            base_model = getattr(video_models, self.model_name)(pretrained=True)
-            self.model = create_feature_extractor(
-                base_model, {self.node_name: 'feature'})
+            # weights = getattr(video_models, self.weight_name).pretrained
+            # self.transforms = weights.transforms
+            # base_model = getattr(video_models, self.model_name)(pretrained=True)
+            # self.model = create_feature_extractor(
+            #     base_model, {self.node_name: 'feature'})
+            # self.model = self.model.to(self.device).eval()
+            self.model = getattr(video_models, self.model_name)(pretrained=True)
             self.model = self.model.to(self.device).eval()
 
     def extract_cnn3d_features(self, clip: torch.Tensor) -> torch.Tensor:
