@@ -76,6 +76,7 @@ class CNN3DFeature(Stage):
             clip=clip.permute(3,0,1,2).unsqueeze(0)
             clip=clip.float()/255.0
             clip=clip[:,:,::10,::10,::10]
+            clip = clip.to(self.device)
             features=self.model(clip)['feature'].squeeze(0)
         return features
 
