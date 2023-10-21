@@ -19,23 +19,23 @@ for index,row in train_val_df.iterrows():
         pkl_data=pickle.load(file)
     data.append(pkl_data[1].flatten())
     labels.append(label)
-
+print("dataset built")
 rf_classifier = RandomForestClassifier(n_estimators=100, random_state=42)
 rf_classifier.fit(data, labels)
-
+print("training done")
 
 test_data=[]
 test_df=pd.read_csv("data/labels/test_for_students.csv",header=0)
 for index,row in test_df.iterrows():
     filename=row[0]
+print("predicting")
+pred = rf_classifier.predict(test_data)
 
 pred=np.array(pred)
 result_df=pd.Dataframe({
     'Id':test_df['Id'],
     'category':pred
 })
-
-pred = rf_classifier.predict(test_data)
 
 result.to_csv('model_pred.csv',index=False)
 # # List all files in the current directory
