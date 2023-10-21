@@ -42,7 +42,7 @@ result_df=pd.DataFrame({
     'category':pred
 })
 
-result.to_csv('model_pred.csv',index=False)
+result_df.to_csv('model_pred.csv',index=False)
 # # List all files in the current directory
 # pickle_files = [f for f in os.listdir() if f.endswith(".pkl")]
 
