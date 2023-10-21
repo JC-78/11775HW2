@@ -41,9 +41,9 @@ class CNN3DFeature(Stage):
             # self.model.load_state_dict(state_dict)
             # self.model = create_feature_extractor(self.model, self.node_name)
             #self.model = self.model.to(self.device).eval()
-            weights = getattr(video_models, self.weight_name).DEFAULT
-            self.transforms = weights.transforms()
-            base_model = getattr(video_models, self.model_name)(weights=weights)
+            weights = getattr(video_models, self.weight_name).pretrained
+            self.transforms = weights.transforms
+            base_model = getattr(video_models, self.model_name)(pretrained=True)
             self.model = create_feature_extractor(
                 base_model, {self.node_name: 'feature'})
             self.model = self.model.to(self.device).eval()
@@ -59,17 +59,22 @@ class CNN3DFeature(Stage):
         # Then apply self.transforms to batch to get model input.
         # Finally apply self.model on the input to get features.
         # Wrap the model with torch.no_grad() to avoid OOM.
-
-        clip = clip.unsqueeze(0).permute(0, 4, 1, 2, 3).to(self.device)
+        clip = clip.float() / 255.0
         
-        # Apply the model
+        # Convert to [1 x T x C x H x W] format expected by PyTorch
+        clip = clip.permute(0, 4, 1, 2, 3)
+        
+        # Apply self.transforms to clip to get model input.
+        clip = self.transforms(clip)
+        
+        # Ensure model is in evaluation mode and on the correct device.
+        self.model.eval().to(self.device)
+        
+        # Wrap the model with torch.no_grad() to avoid OOM
         with torch.no_grad():
-            features = self.model(clip)
+            features = self.model(clip.to(self.device))
         
-        # Reshape to [D]
-        features = features.squeeze().cpu()
-        
-        return features
+        return features['feature'].squeeze()
 
     def process(self, task):
         task.start(self)
