@@ -59,7 +59,7 @@ class CNN3DFeature(Stage):
         clip = clip.float() / 255.0
         
         # Convert to [1 x T x C x H x W] format expected by PyTorch
-        clip = clip.permute(0, 4, 1, 2, 3)
+        clip = clip.permute(0, 3, 1, 2)
         
         # Apply self.transforms to clip to get model input.
         clip = self.transforms(clip)
