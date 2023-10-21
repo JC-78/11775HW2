@@ -59,7 +59,7 @@ class MlpClassifier(pl.LightningModule):
         scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
             optimizer, factor=self.hparams.scheduler_factor, patience=self.hparams.scheduler_patience
         )
-        return {'optimizer': optimizer, 'scheduler': scheduler, 'monitor': 'val_loss'}
+        return {'optimizer': optimizer, 'lr_scheduler': scheduler, 'monitor': 'val_loss'}
 
     @classmethod
     def add_argparse_args(cls, parent_parser):
