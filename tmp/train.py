@@ -28,6 +28,11 @@ test_data=[]
 test_df=pd.read_csv("data/labels/test_for_students.csv",header=0)
 for index,row in test_df.iterrows():
     filename=row[0]
+    pkl=os.path.join('data/cnn/',filename+".pkl")
+    with open(pkl,'rb') as file:
+        pkl_data=pickle.load(file)
+    test_data.append(pkl_data[1].flatten())
+    
 print("predicting")
 pred = rf_classifier.predict(test_data)
 
