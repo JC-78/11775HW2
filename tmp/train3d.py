@@ -14,7 +14,7 @@ train_val_df = pd.read_csv("data/labels/train_val.csv")
 for index,row in train_val_df.iterrows():
     filename=row[0]
     label=row[1]
-    pkl=os.path.join('data/cnn/',filename+".pkl")
+    pkl=os.path.join('data/cnn3d/',filename+".pkl")
     with open(pkl,'rb') as file:
         pkl_data=pickle.load(file)
     data.append(pkl_data[1].flatten())
@@ -28,7 +28,7 @@ test_data=[]
 test_df=pd.read_csv("data/labels/test_for_students.csv",header=0)
 for index,row in test_df.iterrows():
     filename=row[0]
-    pkl=os.path.join('data/cnn/',filename+".pkl")
+    pkl=os.path.join('data/cnn3d/',filename+".pkl")
     with open(pkl,'rb') as file:
         pkl_data=pickle.load(file)
     test_data.append(pkl_data[1].flatten())
@@ -42,7 +42,7 @@ result_df=pd.DataFrame({
     'category':pred
 })
 
-result_df.to_csv('cnn_pred.csv',index=False)
+result_df.to_csv('3d_pred.csv',index=False)
 # # List all files in the current directory
 # pickle_files = [f for f in os.listdir() if f.endswith(".pkl")]
 
