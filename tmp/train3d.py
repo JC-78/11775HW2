@@ -23,7 +23,7 @@ for index,row in train_val_df.iterrows():
     item=pkl_data[1].flatten()
     # print("item shape",item.shape)
     # reshaped_item=np.resize(item,2048)
-    reshaped_item=np.resize(item,6144)
+    reshaped_item=np.resize(item,20480)
     # print("reshaped item shape",reshaped_item.shape)
     data.append(reshaped_item)
     #version 2
@@ -65,7 +65,7 @@ for index,row in test_df.iterrows():
     with open(pkl,'rb') as file:
         pkl_data=pickle.load(file)
     item=pkl_data[1].flatten()
-    reshaped_item=np.resize(item,2048)
+    reshaped_item=np.resize(item,20480)
     test_data.append(reshaped_item)
     # target_length = 2048
     
