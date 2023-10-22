@@ -38,7 +38,9 @@ for index,row in test_df.iterrows():
     pkl=os.path.join('data/cnn3d/',filename+".pkl")
     with open(pkl,'rb') as file:
         pkl_data=pickle.load(file)
-    test_data.append(pkl_data[1].flatten())
+    item=pkl_data[1].flatten()
+    reshaped_item=np.resize(item,2048)
+    test_data.append(reshaped_item)
 print("Shape of test data:", np.array(test_data).shape)
 print("predicting")
 pred = rf_classifier.predict(test_data)
