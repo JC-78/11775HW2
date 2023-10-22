@@ -19,6 +19,8 @@ for index,row in train_val_df.iterrows():
         pkl_data=pickle.load(file)
     data.append(pkl_data[1].flatten())
     labels.append(label)
+print("Shape of data:", np.array(data).shape)
+print("Shape of labels:", np.array(labels).shape)
 print("dataset built")
 rf_classifier = RandomForestClassifier(n_estimators=100, random_state=42)
 rf_classifier.fit(data, labels)
@@ -32,7 +34,7 @@ for index,row in test_df.iterrows():
     with open(pkl,'rb') as file:
         pkl_data=pickle.load(file)
     test_data.append(pkl_data[1].flatten())
-    
+print("Shape of test data:", np.array(test_data).shape)
 print("predicting")
 pred = rf_classifier.predict(test_data)
 
