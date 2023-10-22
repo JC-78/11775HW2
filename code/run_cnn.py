@@ -39,6 +39,7 @@ class ExtractCNNFeature(System):
             CNNFeature(cnn_resources, model_name='resnet50',  
                        weight_name='ResNet50_Weights', 
                        node_name='avgpool',
+                       replica_per_gpu=self.args.replica_per_gpu),
             SaveFeature(io_resources, feature_dir=self.args.cnn_dir),
         ]
         return stages
