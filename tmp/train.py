@@ -20,7 +20,7 @@ for index,row in train_val_df.iterrows():
     data.append(pkl_data[1].flatten())
     labels.append(label)
 print("dataset built")
-rf_classifier = RandomForestClassifier(n_estimators=100, random_state=42)
+rf_classifier = RandomForestClassifier(n_estimators=300, random_state=42)
 rf_classifier.fit(data, labels)
 print("training done")
 
