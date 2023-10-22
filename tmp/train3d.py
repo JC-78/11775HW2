@@ -53,8 +53,21 @@ for index,row in test_df.iterrows():
     with open(pkl,'rb') as file:
         pkl_data=pickle.load(file)
     item=pkl_data[1].flatten()
-    reshaped_item=np.resize(item,2048)
-    test_data.append(reshaped_item)
+    # reshaped_item=np.resize(item,2048)
+    # test_data.append(reshaped_item)
+    target_length = 2048
+    
+    if len(item) < target_length:
+        # Pad shorter arrays with zeros
+        padded_item = np.pad(item, (0, target_length - len(item)))
+        test_data.append(padded_item)
+    elif len(item) > target_length:
+        # Truncate longer arrays
+        truncated_item = item[:target_length]
+        test_data.append(truncated_item)
+    else:
+        # Keep arrays of the target length
+        test_data.append(item)
 print("Shape of test data:", np.array(test_data).shape)
 print("predicting")
 pred = rf_classifier.predict(test_data)
