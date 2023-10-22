@@ -31,11 +31,11 @@ class LoadVideo(Stage):
         Return: downsampled frames [t x H x W x C]
         """
         # TODO: downsample the frames to self.target_frame_rate
-        target_frame_rate = self.target_frame_rate
-        factor = int(frame_rate / target_frame_rate)
         
-        if factor <= 0:
-            raise ValueError(f"Invalid factor: {factor}. frame_rate: {frame_rate}, target_frame_rate: {target_frame_rate}")
+        # if factor <= 0:
+        #     raise ValueError(f"Invalid factor: {factor}. frame_rate: {frame_rate}, target_frame_rate: {target_frame_rate}")
+        target_frame_rate = self.target_frame_rate
+        factor = max(int(frame_rate / target_frame_rate), 1)
         
         return frames[::factor]
 
