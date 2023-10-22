@@ -19,10 +19,24 @@ for index,row in train_val_df.iterrows():
         pkl_data=pickle.load(file)
     print(f"Filename: {filename}, Shape: {pkl_data[1].flatten().shape}")
     item=pkl_data[1].flatten()
-    print("item shape",item.shape)
-    reshaped_item=np.resize(item,2048)
-    print("reshaped item shape",reshaped_item.shape)
-    data.append(reshaped_item)
+    # print("item shape",item.shape)
+    # reshaped_item=np.resize(item,2048)
+    # print("reshaped item shape",reshaped_item.shape)
+    # data.append(reshaped_item)
+    #version 2
+    target_length = 2048
+    
+    if len(item) < target_length:
+        # Pad shorter arrays with zeros
+        padded_item = np.pad(item, (0, target_length - len(item)))
+        data.append(padded_item)
+    elif len(item) > target_length:
+        # Truncate longer arrays
+        truncated_item = item[:target_length]
+        data.append(truncated_item)
+    else:
+        # Keep arrays of the target length
+        data.append(item)
     labels.append(label)
 print("Shape of data:", np.array(data).shape)
 print("Shape of labels:", np.array(labels).shape)
@@ -52,28 +66,3 @@ result_df=pd.DataFrame({
 })
 
 result_df.to_csv('3d_pred.csv',index=False)
-# # List all files in the current directory
-# pickle_files = [f for f in os.listdir() if f.endswith(".pkl")]
-
-# # Read pickle files and concatenate them into a single dataframe
-# arrays = []
-# for file_name in pickle_files:
-#     with open(file_name, 'rb') as file:
-#         df = pickle.load(file)
-#         print(df[1].shape)
-#         arrays.append(df[1].flatten())
-
-# combined_array = np.concatenate(arrays)
-
-# combined_df = pd.DataFrame(combined_array)
-
-# # Read train_val.csv
-
-# # Print first 5 rows of combined dataframe
-# print("First 5 rows of combined dataframe:")
-# print(combined_df.head())
-
-# # Print number of rows and first 5 rows of train_val.csv dataframe
-# print("\nNumber of rows in train_val.csv:", len(train_val_df))
-# print("\nFirst 5 rows of train_val.csv:")
-# print(train_val_df.head())
