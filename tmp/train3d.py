@@ -18,7 +18,11 @@ for index,row in train_val_df.iterrows():
     with open(pkl,'rb') as file:
         pkl_data=pickle.load(file)
     print(f"Filename: {filename}, Shape: {pkl_data[1].flatten().shape}")
-    data.append(pkl_data[1].flatten())
+    item=pkl_data[1].flatten()
+    print("item shape",item.shape)
+    reshaped_item=np.resize(item,2048)
+    print("reshaped item shape",reshaped_item.shape)
+    data.append(reshaped_item)
     labels.append(label)
 print("Shape of data:", np.array(data).shape)
 print("Shape of labels:", np.array(labels).shape)
