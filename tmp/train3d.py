@@ -17,6 +17,7 @@ for index,row in train_val_df.iterrows():
     pkl=os.path.join('data/cnn3d/',filename+".pkl")
     with open(pkl,'rb') as file:
         pkl_data=pickle.load(file)
+    print(f"Filename: {filename}, Shape: {pkl_data[1].flatten().shape}")
     data.append(pkl_data[1].flatten())
     labels.append(label)
 print("Shape of data:", np.array(data).shape)
