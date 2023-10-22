@@ -31,11 +31,14 @@ class ExtractCNNFeature(System):
         stages = [
             LoadVideo(io_resources, video_dir=self.args.video_dir,
                       batch_size=self.args.batch_size),
-            CNNFeature(cnn_resources, model_name='resnet18',
-                       weight_name='ResNet18_Weights',
+            # CNNFeature(cnn_resources, model_name='resnet18',
+            #            weight_name='ResNet18_Weights',
+            #            node_name='avgpool',
+            #            # Number of parallel workers in the stage
+            #            replica_per_gpu=self.args.replica_per_gpu),
+            CNNFeature(cnn_resources, model_name='resnet50',  
+                       weight_name='ResNet50_Weights', 
                        node_name='avgpool',
-                       # Number of parallel workers in the stage
-                       replica_per_gpu=self.args.replica_per_gpu),
             SaveFeature(io_resources, feature_dir=self.args.cnn_dir),
         ]
         return stages
