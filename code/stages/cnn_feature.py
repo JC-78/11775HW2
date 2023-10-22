@@ -13,8 +13,11 @@ class CNNFeature(Stage):
     Output: yield CNN features of each frame, each as [D]
     """
 
-    def allocate_resource(self, resources, *, model_name='resnet18',
-                          weight_name='ResNet18_Weights',
+    # def allocate_resource(self, resources, *, model_name='resnet18',
+    #                       weight_name='ResNet18_Weights',
+    #                       node_name='avgpool', replica_per_gpu=1):
+    def allocate_resource(self, resources, *, model_name='resnet50',
+                          weight_name='ResNet50_Weights',
                           node_name='avgpool', replica_per_gpu=1):
         self.model_name = model_name
         self.weight_name = weight_name
