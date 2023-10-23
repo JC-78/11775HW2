@@ -19,7 +19,7 @@ class CNNFeature(Stage):
     # def allocate_resource(self, resources, *, model_name='resnet152',
     #                       weight_name='ResNet152_Weights',
     #                       node_name='avgpool', replica_per_gpu=1):
-    def allocate_resource(self, resources, *, model_name='ConvNeXt_Large',
+    def allocate_resource(self, resources, *, model_name='convnext_large',
                           weight_name='ConvNeXt_Large_Weights',
                           node_name='avgpool', replica_per_gpu=1):
         self.model_name = model_name
