@@ -59,7 +59,6 @@ class CNN3DFeature(Stage):
             # #     self.transforms = base_model.transforms
             # # else:
             # #     self.transforms = None
-            self.model = self.model.to(self.device).eval()
             weights=getattr(models, self.weight_name).DEFAULT
             self.transforms=weights.transforms()
             base_model=getattr(video_models,self.model_name)(weights=weights)

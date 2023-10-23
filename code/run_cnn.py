@@ -36,14 +36,14 @@ class ExtractCNNFeature(System):
             #            node_name='avgpool',
             #            # Number of parallel workers in the stage
             #            replica_per_gpu=self.args.replica_per_gpu),
-            # CNNFeature(cnn_resources, model_name='resnet152',  
-            #            weight_name='ResNet152_Weights', 
-            #            node_name='avgpool',
-            #            replica_per_gpu=self.args.replica_per_gpu),
-            CNNFeature(cnn_resources, model_name='convnext_large',  
-                       weight_name='ConvNeXt_Large_Weights', 
+            CNNFeature(cnn_resources, model_name='resnet152',  
+                       weight_name='ResNet152_Weights', 
                        node_name='avgpool',
                        replica_per_gpu=self.args.replica_per_gpu),
+            # CNNFeature(cnn_resources, model_name='convnext_large',  
+            #            weight_name='ConvNeXt_Large_Weights', 
+            #            node_name='avgpool',
+            #            replica_per_gpu=self.args.replica_per_gpu),
             SaveFeature(io_resources, feature_dir=self.args.cnn_dir),
         ]
         return stages
