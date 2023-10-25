@@ -59,7 +59,7 @@ class CNN3DFeature(Stage):
             # #     self.transforms = base_model.transforms
             # # else:
             # #     self.transforms = None
-            weights=getattr(models, self.weight_name).DEFAULT
+            weights=getattr(video_models, self.weight_name).DEFAULT
             self.transforms=weights.transforms()
             base_model=getattr(video_models,self.model_name)(weights=weights)
             self.model=create_feature_extractor(base_model,{self.node_name: 'feature'})
