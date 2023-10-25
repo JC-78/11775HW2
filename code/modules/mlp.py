@@ -18,7 +18,7 @@ class MlpClassifier(pl.LightningModule):
         # ]
         layers = [
             # nn.Linear(self.hparams.num_features, 512),  # Example hidden layer with 512 units
-            nn.Linear(512,512)
+            nn.Linear(512,512),
             nn.ReLU(),
             nn.Linear(512,512),
             nn.ReLU(),
