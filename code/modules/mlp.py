@@ -11,7 +11,7 @@ from torchmetrics import Accuracy
 
 class Network(torch.nn.Module):
     def __init__(self,input_size,output_size):
-        super(Recommend_Network,self).__init__()
+        super(Network,self).__init__()
         self.input_size=input_size
         self.output_size=output_size
         layers=[]
