@@ -1,13 +1,15 @@
 from argparse import ArgumentParser
+
+import numpy as np
 import pytorch_lightning as pl
+
 import torch
 import torch.nn as nn
 from torch.optim.lr_scheduler import *
 
 from torchmetrics import Accuracy
-import numpy as np
 
-class Recommend_Network(torch.nn.Module):
+class Network(torch.nn.Module):
     def __init__(self,input_size,output_size):
         super(Recommend_Network,self).__init__()
         self.input_size=input_size
@@ -26,9 +28,12 @@ class Recommend_Network(torch.nn.Module):
         return [nn.Linear(in_dim,out_dim),
         nn.BatchNorm1d(out_dim),
         nn.GELU(),
-        nn.Dropout(np.random.uniform(0.1,0.6))]
+        # nn.Dropout(np.random.uniform(0.1,0.6))]
+        nn.Dropout(np.random.uniform(0.1,0.5))]
+
 
     def forward(self,x):
+        # print(x.size)
         x = x.squeeze()
         return self.layers(x)
 
@@ -65,7 +70,7 @@ class MlpClassifier(pl.LightningModule):
         #     nn.Linear(256,128),
         #     nn.Linear(128, self.hparams.num_classes)  # Output layer with num_classes units
         # ]
-        self.model=Recommend_Network(input_size=self.hparams.num_features,output_size=self.hparams.num_classes)
+        self.model=Network(input_size=self.hparams.num_features,output_size=self.hparams.num_classes)
         # self.model = nn.Sequential(*layers)
         self.loss = nn.CrossEntropyLoss()
         self.accuracy = Accuracy()
@@ -101,7 +106,7 @@ class MlpClassifier(pl.LightningModule):
         # scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
         #     optimizer, factor=self.hparams.scheduler_factor, patience=self.hparams.scheduler_patience
         # )
-        optimizer = torch.optim.AdamW(self.model.parameters(),lr=0.001,weight_decay=5e-4)
+        optimizer = torch.optim.AdamW(self.model.parameters(),lr=0.001,weight_decay=4.5e-4)
         scheduler = CosineAnnealingWarmRestarts(optimizer,T_0=10,T_mult=2,eta_min=0.0001)
         return {'optimizer': optimizer, 'lr_scheduler': scheduler}
 
