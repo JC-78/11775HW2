@@ -29,6 +29,7 @@ class Recommend_Network(torch.nn.Module):
         nn.Dropout(np.random.uniform(0.1,0.6))]
 
     def forward(self,x):
+        print(x.size())
         return self.layers(x)
 
     def initialize_weights(self):
