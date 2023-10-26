@@ -5,6 +5,39 @@ import torch
 import torch.nn as nn
 from torchmetrics import Accuracy
 
+class Recommend_Network(torch.nn.Module):
+    def __init__(self,input_size,output_Size):
+        super(Recommend_Network,self).__init__()
+        self.input_size=input_size
+        self.output_size=output_size
+        layers=[]
+        dims=[self.input_size]+[64]
+        in_out_dims=list(zip(dims[:-1],dims[1:]))
+        for i in range(len(in_out_dims)):
+            in_dim,out_dim=in_out_dims[i]
+            layers+=self.make_layer(in_dim,out_dim)
+        layers+=[nn.Linear(out_dim,self.output_size)]
+        self.layers=nn.Sequential(*layers)
+        self.initialize_weights()
+
+    def make_layer(self,in_dim,out_dim):
+        return [nn.Linear(in_dim,out_dim),
+        nn.BatchNorm1d(out_dim),
+        nn.GELU(),
+        nn.Dropout(np.random.uniform(0.1,0.6))]
+
+    def forward(self,x):
+        return self.layers(x)
+
+    def initialize_weights(self):
+        for m in self.modules():
+            if isinstance(m,nn.Linear):
+                nn.init.kaiming_uniform_(m.weight.data)
+                nn.init.constant_(m.bias,0)
+            elif isinstance(m,nn.BatchNorm1d):
+                nn.init.constant_(m.weight,1)
+                nn.init.constant_(m.bias,0)
+            print("Done with weight initialization")
 
 class MlpClassifier(pl.LightningModule):
 
@@ -16,20 +49,21 @@ class MlpClassifier(pl.LightningModule):
         #     # Input self.hparams.num_features
         #     # Output self.hparams.num_classes
         # ]
-        layers = [
-            nn.Linear(self.hparams.num_features, 512),  # Example hidden layer with 512 units
-            # nn.Linear(512,512),
-            nn.ReLU(),
-            nn.Linear(512,512),
-            nn.ReLU(),
-            nn.Linear(512,256),
-            nn.ReLU(),
-            nn.Linear(256,256),
-            nn.ReLU(),
-            nn.Linear(256,128),
-            nn.Linear(128, self.hparams.num_classes)  # Output layer with num_classes units
-        ]
-        self.model = nn.Sequential(*layers)
+        # layers = [
+        #     nn.Linear(self.hparams.num_features, 512),  # Example hidden layer with 512 units
+        #     # nn.Linear(512,512),
+        #     nn.ReLU(),
+        #     nn.Linear(512,512),
+        #     nn.ReLU(),
+        #     nn.Linear(512,256),
+        #     nn.ReLU(),
+        #     nn.Linear(256,256),
+        #     nn.ReLU(),
+        #     nn.Linear(256,128),
+        #     nn.Linear(128, self.hparams.num_classes)  # Output layer with num_classes units
+        # ]
+        self.model=Recommend_Network(input_size=self.hparams.num_features,output_size=self.hparams.num_classes)
+        # self.model = nn.Sequential(*layers)
         self.loss = nn.CrossEntropyLoss()
         self.accuracy = Accuracy()
 
@@ -60,11 +94,13 @@ class MlpClassifier(pl.LightningModule):
         # TODO: define optimizer and optionally learning rate scheduler
         # The simplest form would be `return torch.optim.Adam(...)`
         # For more advanced usages, see https://pytorch-lightning.readthedocs.io/en/latest/common/lightning_module.html#configure-optimizers
-        optimizer = torch.optim.Adam(self.parameters(), lr=self.hparams.learning_rate)
-        scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
-            optimizer, factor=self.hparams.scheduler_factor, patience=self.hparams.scheduler_patience
-        )
-        return {'optimizer': optimizer, 'lr_scheduler': scheduler, 'monitor': 'val_loss'}
+        # optimizer = torch.optim.Adam(self.parameters(), lr=self.hparams.learning_rate)
+        # scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
+        #     optimizer, factor=self.hparams.scheduler_factor, patience=self.hparams.scheduler_patience
+        # )
+        optimizer = torch.optim.AdamW(self.model.parameters(),lr=0.001,weight_decay=5e-4)
+        scheduler = CosineAnnealingWarmRestarts(optimizer,T_0=10,T_mult=2,eta_min=0.0001)
+        return {'optimizer': optimizer, 'lr_scheduler': scheduler}
 
     @classmethod
     def add_argparse_args(cls, parent_parser):
