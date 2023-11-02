@@ -70,11 +70,11 @@ print("Shape of squeezed csv data: ",train_data_csv.shape)
 
 print("Shape of labels after reshaping:", labels1.shape)
 
-rf_classifier = RandomForestClassifier(n_estimators=100, random_state=42)
-rf_classifier1 = RandomForestClassifier(n_estimators=100, random_state=42)
+rf_classifier_csv = RandomForestClassifier(n_estimators=100, random_state=42)
+rf_classifier_pkl = RandomForestClassifier(n_estimators=100, random_state=42)
 
-rf_classifier.fit(train_data_csv, labels1)
-rf_classifier1.fit(train_data_pkl, labels1)
+rf_classifier_csv.fit(train_data_csv, labels1)
+rf_classifier_pkl.fit(train_data_pkl, labels1)
 print("training done")
 
 test_data_pkl=[]
