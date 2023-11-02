@@ -79,7 +79,7 @@ test_df=pd.read_csv("11775-HW2/data/labels/test_for_students.csv",header=0)
 for index,row in test_df.iterrows():
     filename=row[0]
     csv=os.path.join('11775-HW1/snf/',filename+".csv")
-    pkl=os.path.join('data/cnn3d/',filename+".pkl")
+    pkl=os.path.join('11775/data/cnn3d/',filename+".pkl")
     if not os.path.exists(csv):  # Check if CSV file exists
         print(f"CSV file {csv} does not exist. Skipping...")
         continue
