@@ -1,9 +1,9 @@
-# import pandas as pd
-# import pickle
-# import os
-# import numpy as np
-# from sklearn.model_selection import train_test_split
-# from sklearn.ensemble import RandomForestClassifier
+import pandas as pd
+import pickle
+import os
+import numpy as np
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestClassifier
 
 # # csv_file_path="data/labels/train_val.csv"
 
@@ -91,37 +91,6 @@
 # })
 
 # result_df.to_csv('3d_pred.csv',index=False)
-
-
-
-import pandas as pd
-import pickle
-import os
-import numpy as np
-from sklearn.model_selection import train_test_split
-from sklearn.ensemble import RandomForestClassifier
-
-# csv_file_path="data/labels/train_val.csv"
-
-data=[]
-labels=[]
-train_val_df = pd.read_csv("data/labels/train_val.csv")
-
-length_frequency = {}
-
-for index,row in train_val_df.iterrows():
-    filename=row[0]
-    label=row[1]
-    pkl=os.path.join('data/cnn3d/',filename+".pkl")
-    with open(pkl,'rb') as file:
-        pkl_data=pickle.load(file)
-    print("pkl_data from cnn3d",pkl_data.shape)
-    item=pkl_data[1].flatten()
-
-    print(len(pkl_data)) #2
-    print(pkl_data[0]) #0
-    print(len(pkl_data[1])) #512
-
 
 """
 read from csv in sift
