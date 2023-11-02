@@ -96,12 +96,14 @@ for index,row in test_df.iterrows():
     meow_pkl = meow_pkl.reshape(-1,1)
     test_data_pkl.append(meow_pkl)
 
+test_data_csv=np.array(test_data_csv)
+test_data_pkl=np.array(test_data_pkl)
 print("Shape of test data:", test_data_pkl.shape)
 
 print("predicting")
 
-test_data_csv = np.array(test_data_csv).squeeze()
-test_data_pkl = np.array(test_data_pkl).squeeze()
+test_data_csv = test_data_csv.squeeze()
+test_data_pkl =test_data_pkl.squeeze()
 print("Shape of squeezed test data:", test_data_pkl.shape)
 
 
@@ -121,4 +123,4 @@ result_df=pd.DataFrame({
     'category':pred
 })
 
-result_df.to_csv('low_fusion_pred.csv',index=False)
+result_df.to_csv('high_fusion_pred.csv',index=False)
