@@ -63,7 +63,9 @@ print("Shape of train_data_pkl:", train_data_pkl.shape)
 print("Shape of labels:", labels.shape)
 print("dataset built")
 labels1=labels.reshape(-1,1)
-print("Shape of squeezed data: ",train_data_csv.squeeze().shape)
+train_data_cs=train_data_csv.squeeze()
+train_data_pkl=train_data_pkl.squeeze()
+print("Shape of squeezed data: ",train_data_pkl.shape)
 print("Shape of labels after reshaping:", labels1.shape)
 
 rf_classifier = RandomForestClassifier(n_estimators=100, random_state=42)
@@ -92,13 +94,14 @@ for index,row in test_df.iterrows():
     meow_pkl = meow_pkl.reshape(-1,1)
     test_data_pkl.append(meow_pkl)
 
-print("Shape of test data:", test_data.shape)
-print("Shape of squeezed test data:", test_data1.shape)
+print("Shape of test data:", test_data_pkl.shape)
 
 print("predicting")
 
 test_data_csv = np.array(test_data_csv).squeeze()
 test_data_pkl = np.array(test_data_pkl).squeeze()
+print("Shape of squeezed test data:", test_data_pkl.shape)
+
 
 # Get logits from both models
 logits_csv = rf_classifier_csv.predict_proba(test_data_csv)
