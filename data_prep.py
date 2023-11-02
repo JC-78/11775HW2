@@ -37,6 +37,9 @@ for index,row in train_val_df.iterrows():
     csv_data = np.genfromtxt(csv, delimiter=',').reshape(-1, 1) 
     array1_np = np.array(pkl_data[0])
     array2_np = np.array(pkl_data[1])
+    print("array1 (pkl_data[0]) np shape is ",array1_np.shape)
+    print("array2 (pkl_data[1]) np shape is",array2_np.shape)
+
     meow = array2_np.reshape(array2_np.shape[0]*array2_np.shape[2]*array2_np.shape[3],1)
     combined_data = np.concatenate((csv_data, meow), axis=0)
     data.append(combined_data)
