@@ -20,9 +20,11 @@ import numpy as np
 # print("array2 (pkl_data[1]) flattened np shape is",array2_np.flatten().shape)
 
 # print("printing content")
-# meow = array2_np.reshape(array2_np.shape[0]*array2_np.shape[2]*array2_np.shape[3],1)
+# # meow = array2_np.reshape(array2_np.shape[0]*array2_np.shape[2]*array2_np.shape[3],1)
+# meow=array2_np.flatten()
+# meow=meow.reshape(-1,1)
 # print( "meow.shape",meow.shape) #same as flattening. But cannot always  use method above
-#cuz ValueError: cannot reshape array of size 768 into shape (1,1)
+# # cuz ValueError: cannot reshape array of size 768 into shape (1,1)
 # combined_data = np.concatenate((csv_data, meow), axis=0)
 # print(combined_data.shape)
 
@@ -49,6 +51,7 @@ for index,row in train_val_df.iterrows():
     meow=array2_np.flatten()
     print("csv_data shape is",csv_data.shape)
     print("3d video data is ",meow.shape)
+    meow=meow.reshape(-1,1)
     combined_data = np.concatenate((csv_data, meow), axis=0)
     data.append(combined_data)
     labels.append(label)
@@ -73,6 +76,7 @@ for index,row in test_df.iterrows():
     array2_np = np.array(pkl_data[1])
     # meow = array2_np.reshape(array2_np.shape[0]*array2_np.shape[2]*array2_np.shape[3],1)
     meow = array2_np.flatten()
+    meow=meow.reshape(-1,1)
     combined_data = np.concatenate((csv_data, meow), axis=0)
     test_data.append(combined_data)
 
