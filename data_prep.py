@@ -39,18 +39,21 @@ for index,row in train_val_df.iterrows():
     label=row[1]
     pkl=os.path.join('11775-HW2/data/cnn3d/',filename+".pkl")
     csv=os.path.join('11775-HW1/snf/',filename+".csv")
+    if not os.path.exists(csv):  # Check if CSV file exists
+        print(f"CSV file {csv} does not exist. Skipping...")
+        continue
     with open(pkl,'rb') as file:
         pkl_data=pickle.load(file)
     csv_data = np.genfromtxt(csv, delimiter=',').reshape(-1, 1) 
     array1_np = np.array(pkl_data[0])
     array2_np = np.array(pkl_data[1])
-    print("array1 (pkl_data[0]) np shape is ",array1_np.shape)
-    print("array2 (pkl_data[1]) np shape is",array2_np.shape)
+    # print("array1 (pkl_data[0]) np shape is ",array1_np.shape)
+    # print("array2 (pkl_data[1]) np shape is",array2_np.shape)
 
     # meow = array2_np.reshape(array2_np.shape[0]*array2_np.shape[2]*array2_np.shape[3],1)
     meow=array2_np.flatten()
-    print("csv_data shape is",csv_data.shape)
-    print("3d video data is ",meow.shape)
+    # print("csv_data shape is",csv_data.shape)
+    # print("3d video data is ",meow.shape)
     meow=meow.reshape(-1,1)
     combined_data = np.concatenate((csv_data, meow), axis=0)
     data.append(combined_data)
@@ -69,6 +72,9 @@ for index,row in test_df.iterrows():
     filename=row[0]
     csv=os.path.join('11775-HW1/snf/',filename+".csv")
     pkl=os.path.join('data/cnn3d/',filename+".pkl")
+    if not os.path.exists(csv):  # Check if CSV file exists
+        print(f"CSV file {csv} does not exist. Skipping...")
+        continue
     with open(pkl,'rb') as file:
         pkl_data=pickle.load(file)
     csv_data = np.genfromtxt(csv, delimiter=',').reshape(-1, 1) 
