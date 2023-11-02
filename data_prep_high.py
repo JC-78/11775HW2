@@ -112,9 +112,11 @@ print("Shape of squeezed test csv data:", test_data_csv.shape)
 logits_csv = rf_classifier_csv.predict_proba(test_data_csv)
 logits_pkl = rf_classifier_pkl.predict_proba(test_data_pkl)
 print("Shape of logits_csv:", logits_csv.shape)
-print("Shape of logits_pkl:", logits_pkl.shape)
-# Combine logits (for example, by concatenating them)
-combined_logits = np.concatenate((logits_csv, logits_pkl), axis=1)
+print("Shape of logits_pkl:", logits_pkl.shape) #(749,15)
+# combined_logits = np.concatenate((logits_csv, logits_pkl), axis=1) #(749,30)
+# combined_logits = np.concatenate((logits_csv, logits_pkl), axis=0)#(1498, 15)
+combined_logits=logits_csv+logits_pkl
+
 print("Shape of combined_logits",combined_logits.shape)
 # Make predictions based on the combined logits
 pred = np.argmax(combined_logits, axis=1)
