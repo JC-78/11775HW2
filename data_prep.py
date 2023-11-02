@@ -13,18 +13,23 @@ import numpy as np
 # print(csv_data.shape)
 # array1_np = np.array(pkl_data[0])
 # array2_np = np.array(pkl_data[1])
+# #array2 (pkl_data[1]) np shape is (1, 768, 1, 1, 1)
+# #(512, 1, 5, 6)
 # print("array1 (pkl_data[0]) np shape is ",array1_np.shape)
 # print("array2 (pkl_data[1]) np shape is",array2_np.shape)
+# print("array2 (pkl_data[1]) flattened np shape is",array2_np.flatten().shape)
+
 # print("printing content")
 # meow = array2_np.reshape(array2_np.shape[0]*array2_np.shape[2]*array2_np.shape[3],1)
-# print( "meow.shape",meow.shape)
+# print( "meow.shape",meow.shape) #same as flattening. But cannot always  use method above
+#cuz ValueError: cannot reshape array of size 768 into shape (1,1)
 # combined_data = np.concatenate((csv_data, meow), axis=0)
 # print(combined_data.shape)
 
 
 
-# data=[]
-# labels=[]
+data=[]
+labels=[]
 train_val_df = pd.read_csv("11775-HW2/data/labels/train_val.csv")
 
 for index,row in train_val_df.iterrows():
@@ -40,7 +45,8 @@ for index,row in train_val_df.iterrows():
     print("array1 (pkl_data[0]) np shape is ",array1_np.shape)
     print("array2 (pkl_data[1]) np shape is",array2_np.shape)
 
-    meow = array2_np.reshape(array2_np.shape[0]*array2_np.shape[2]*array2_np.shape[3],1)
+    # meow = array2_np.reshape(array2_np.shape[0]*array2_np.shape[2]*array2_np.shape[3],1)
+    meow=array2_np.flatten()
     combined_data = np.concatenate((csv_data, meow), axis=0)
     data.append(combined_data)
     labels.append(label)
@@ -63,7 +69,8 @@ for index,row in test_df.iterrows():
     csv_data = np.genfromtxt(csv, delimiter=',').reshape(-1, 1) 
     array1_np = np.array(pkl_data[0])
     array2_np = np.array(pkl_data[1])
-    meow = array2_np.reshape(array2_np.shape[0]*array2_np.shape[2]*array2_np.shape[3],1)
+    # meow = array2_np.reshape(array2_np.shape[0]*array2_np.shape[2]*array2_np.shape[3],1)
+    meow = array2_np.flatten()
     combined_data = np.concatenate((csv_data, meow), axis=0)
     test_data.append(combined_data)
 
