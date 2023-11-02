@@ -63,9 +63,11 @@ print("Shape of train_data_pkl:", train_data_pkl.shape)
 print("Shape of labels:", labels.shape)
 print("dataset built")
 labels1=labels.reshape(-1,1)
-train_data_cs=train_data_csv.squeeze()
+train_data_csv=train_data_csv.squeeze()
 train_data_pkl=train_data_pkl.squeeze()
-print("Shape of squeezed data: ",train_data_pkl.shape)
+print("Shape of squeezed pkl data: ",train_data_pkl.shape)
+print("Shape of squeezed csv data: ",train_data_csv.shape)
+
 print("Shape of labels after reshaping:", labels1.shape)
 
 rf_classifier = RandomForestClassifier(n_estimators=100, random_state=42)
