@@ -72,11 +72,10 @@ print("Shape of labels after reshaping:", labels1.shape)
 rf_classifier = RandomForestClassifier(n_estimators=100, random_state=42)
 # rf_classifier.fit(data, labels)
 rf_classifier.fit(data1, labels1)
-
 print("training done")
 
 test_data=[]
-test_df=pd.read_csv("data/labels/test_for_students.csv",header=0)
+test_df=pd.read_csv("11775-HW2/data/labels/test_for_students.csv",header=0)
 for index,row in test_df.iterrows():
     filename=row[0]
     csv=os.path.join('11775-HW1/snf/',filename+".csv")
@@ -95,11 +94,13 @@ for index,row in test_df.iterrows():
     combined_data = np.concatenate((csv_data, meow), axis=0)
     test_data.append(combined_data)
 
-   
+test_data=np.array(test_data)
+test_data1=test_data.squeeze()
+print("Shape of test data:", test_data.shape)
+print("Shape of squeezed test data:", test_data1.shape)
 
-print("Shape of test data:", np.array(test_data).shape)
 print("predicting")
-pred = rf_classifier.predict(test_data)
+pred = rf_classifier.predict(test_data1)
 
 pred=np.array(pred)
 result_df=pd.DataFrame({
