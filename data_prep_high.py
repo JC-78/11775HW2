@@ -54,9 +54,7 @@ for index,row in train_val_df.iterrows():
     train_data_pkl.append(meow)
     labels.append(label)
     
-data=np.array(data)
 labels=np.array(labels)
-
 train_data_csv=np.array(train_data_csv)
 train_data_pkl=np.array(train_data_pkl)
 
@@ -64,9 +62,8 @@ print("Shape of train_data_csv:", train_data_csv.shape)
 print("Shape of train_data_pkl:", train_data_pkl.shape)
 print("Shape of labels:", labels.shape)
 print("dataset built")
-data1=data.squeeze()
 labels1=labels.reshape(-1,1)
-print("Shape of squeezed data: ",data1.shape)
+print("Shape of squeezed data: ",train_data_csv.squeeze().shape)
 print("Shape of labels after reshaping:", labels1.shape)
 
 rf_classifier = RandomForestClassifier(n_estimators=100, random_state=42)
