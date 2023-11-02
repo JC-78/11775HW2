@@ -47,6 +47,8 @@ for index,row in train_val_df.iterrows():
 
     # meow = array2_np.reshape(array2_np.shape[0]*array2_np.shape[2]*array2_np.shape[3],1)
     meow=array2_np.flatten()
+    print("csv_data shape is",csv_data.shape)
+    print("3d video data is ",meow.shape)
     combined_data = np.concatenate((csv_data, meow), axis=0)
     data.append(combined_data)
     labels.append(label)
