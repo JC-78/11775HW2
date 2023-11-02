@@ -99,4 +99,4 @@ result_df=pd.DataFrame({
     'category':pred
 })
 
-result_df.to_csv('3d_pred.csv',index=False)
+result_df.to_csv('low_fusion_pred.csv',index=False)
