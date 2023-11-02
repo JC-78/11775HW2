@@ -104,7 +104,8 @@ print("predicting")
 
 test_data_csv = test_data_csv.squeeze()
 test_data_pkl =test_data_pkl.squeeze()
-print("Shape of squeezed test data:", test_data_pkl.shape)
+print("Shape of squeezed test pkl data:", test_data_pkl.shape)
+print("Shape of squeezed test csv data:", test_data_csv.shape)
 
 
 # Get logits from both models
@@ -116,7 +117,7 @@ combined_logits = np.concatenate((logits_csv, logits_pkl), axis=1)
 
 # Make predictions based on the combined logits
 pred = np.argmax(combined_logits, axis=1)
-
+print("pred shape is ",pred.shape)
 pred=np.array(pred)
 result_df=pd.DataFrame({
     'Id':test_df['Id'],
