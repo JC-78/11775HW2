@@ -59,12 +59,20 @@ for index,row in train_val_df.iterrows():
     combined_data = np.concatenate((csv_data, meow), axis=0)
     data.append(combined_data)
     labels.append(label)
-
-print("Shape of data:", np.array(data).shape)
-print("Shape of labels:", np.array(labels).shape)
+data=np.array(data)
+labels=np.array(labels)
+print("Shape of data:", data.shape)
+print("Shape of labels:", labels.shape)
 print("dataset built")
+data1=data.squeeze()
+labels1=labels.reshape(-1,1)
+print("Shape of squeezed data: ",data1.shape)
+print("Shape of labels after reshaping:", labels1.shape)
+
 rf_classifier = RandomForestClassifier(n_estimators=100, random_state=42)
-rf_classifier.fit(data, labels)
+# rf_classifier.fit(data, labels)
+rf_classifier.fit(data1, labels1)
+
 print("training done")
 
 test_data=[]
