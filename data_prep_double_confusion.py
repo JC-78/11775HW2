@@ -7,7 +7,15 @@ from sklearn.ensemble import RandomForestClassifier
 from xgboost import XGBClassifier
 import lightgbm as lgb
 from sklearn.metrics import confusion_matrix
+import matplotlib.pyplot as plt
+import seaborn as sns
 
+plt.figure(figsize=(8, 6))
+
+plt.xlabel('Predicted')
+plt.ylabel('True')
+plt.title('Confusion Matrix for RandomForest')
+plt.savefig('confusion_matrix.png')  # Save the figure
 
 data=[]
 labels=[]
@@ -72,3 +80,6 @@ pred=np.array(pred)
 confusion_matrix(labels1, pred)
 print("Confusion Matrix:")
 print(confusion_matrix)
+
+sns.heatmap(confusion_matrix, annot=True, fmt='d', cmap='Blues', cbar=False)
+plt.show()
