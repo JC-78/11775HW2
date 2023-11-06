@@ -4,6 +4,7 @@ import os
 import numpy as np
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
+from xgboost import XGBClassifier
 
 # csv="Mzg4MTU4MTQ1OTQ4MzcwOTcxMA==.csv"
 # pkl="LTQyMjkzODk1NDU3MjkzOTUwMTA=.pkl"
@@ -70,9 +71,10 @@ print("Shape of squeezed data: ",data1.shape)
 print("Shape of labels after reshaping:", labels1.shape)
 
 rf_classifier = RandomForestClassifier(n_estimators=100, random_state=42)
-rf_classifier_1 = RandomForestClassifier(n_estimators=100, random_state=24)
+xgb_classifier = XGBClassifier(n_estimators=100, random_state=24)
+xgb_classifier.fit(data1, labels1)
+
 rf_classifier.fit(data1, labels1)
-rf_classifier_1.fit(data1, labels1)
 
 print("training done")
 
@@ -104,7 +106,7 @@ print("Shape of squeezed test data:", test_data1.shape)
 print("predicting")
 
 logits_1 = rf_classifier.predict_proba(test_data1)
-logits_2 = rf_classifier_1.predict_proba(test_data1)
+logits_2 = xgb_classifier.predict_proba(test_data1)
 print("Shape of logits_1:", logits_1.shape)
 print("Shape of logits_2:", logits_2.shape) #(749,15)
 # combined_logits = np.concatenate((logits_csv, logits_pkl), axis=1) #(749,30)
