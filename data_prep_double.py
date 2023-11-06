@@ -5,32 +5,7 @@ import numpy as np
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
 from xgboost import XGBClassifier
-
-# csv="Mzg4MTU4MTQ1OTQ4MzcwOTcxMA==.csv"
-# pkl="LTQyMjkzODk1NDU3MjkzOTUwMTA=.pkl"
-# print("csv id extraction ",csv[:-3])
-# with open(pkl,'rb') as file:
-#     pkl_data=pickle.load(file)
-# csv_data = np.genfromtxt(csv, delimiter=',').reshape(-1, 1) 
-# print(csv_data.shape)
-# array1_np = np.array(pkl_data[0])
-# array2_np = np.array(pkl_data[1])
-# #array2 (pkl_data[1]) np shape is (1, 768, 1, 1, 1)
-# #(512, 1, 5, 6)
-# print("array1 (pkl_data[0]) np shape is ",array1_np.shape)
-# print("array2 (pkl_data[1]) np shape is",array2_np.shape)
-# print("array2 (pkl_data[1]) flattened np shape is",array2_np.flatten().shape)
-
-# print("printing content")
-# # meow = array2_np.reshape(array2_np.shape[0]*array2_np.shape[2]*array2_np.shape[3],1)
-# meow=array2_np.flatten()
-# meow=meow.reshape(-1,1)
-# print( "meow.shape",meow.shape) #same as flattening. But cannot always  use method above
-# # cuz ValueError: cannot reshape array of size 768 into shape (1,1)
-# combined_data = np.concatenate((csv_data, meow), axis=0)
-# print(combined_data.shape)
-
-
+import lightgbm as lgb
 
 data=[]
 labels=[]
@@ -72,8 +47,9 @@ print("Shape of labels after reshaping:", labels1.shape)
 
 rf_classifier = RandomForestClassifier(n_estimators=100, random_state=42)
 xgb_classifier = XGBClassifier(n_estimators=100, random_state=24)
+lgb_classifier = lgb.LGBMClassifier(n_estimators=100, random_state=42)
+lgb_classifier.fit(data1, labels1)
 xgb_classifier.fit(data1, labels1)
-
 rf_classifier.fit(data1, labels1)
 
 print("training done")
@@ -107,11 +83,13 @@ print("predicting")
 
 logits_1 = rf_classifier.predict_proba(test_data1)
 logits_2 = xgb_classifier.predict_proba(test_data1)
+logits_lgb = lgb_classifier.predict_proba(test_data1)
+print("Shape of logits_lgb:", logits_lgb.shape)
 print("Shape of logits_1:", logits_1.shape)
 print("Shape of logits_2:", logits_2.shape) #(749,15)
 # combined_logits = np.concatenate((logits_csv, logits_pkl), axis=1) #(749,30)
 # combined_logits = np.concatenate((logits_csv, logits_pkl), axis=0)#(1498, 15)
-combined_logits=logits_1+logits_2
+combined_logits=logits_1+logits_2+logits_lgb
 pred = np.argmax(combined_logits, axis=1)
 
 pred=np.array(pred)
