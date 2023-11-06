@@ -65,21 +65,35 @@ print("training done")
 
 
 print("predicting")
+train_logits_rf = rf_classifier.predict(data1)
+train_logits_xgb = xgb_classifier.predict(data1)
 
-logits_1 = rf_classifier.predict_proba(data1)
-logits_2 = xgb_classifier.predict_proba(data1)
+# Calculate confusion matrix for RandomForest
+confusion_rf = confusion_matrix(labels1, train_logits_rf)
 
-print("Shape of logits_1:", logits_1.shape)
-print("Shape of logits_2:", logits_2.shape) #(749,15)
-# combined_logits = np.concatenate((logits_csv, logits_pkl), axis=1) #(749,30)
-# combined_logits = np.concatenate((logits_csv, logits_pkl), axis=0)#(1498, 15)
-combined_logits=logits_1+logits_2
-pred = np.argmax(combined_logits, axis=1)
+# Calculate confusion matrix for XGBoost
+confusion_xgb = confusion_matrix(labels1, train_logits_xgb)
 
-pred=np.array(pred)
-confusion_matrix(labels1, pred)
-print("Confusion Matrix:")
-print(confusion_matrix)
+# Print confusion matrices
+print("Confusion Matrix for RandomForest:")
+print(confusion_rf)
 
-sns.heatmap(confusion_matrix, annot=True, fmt='d', cmap='Blues', cbar=False)
+print("\nConfusion Matrix for XGBoost:")
+print(confusion_xgb)
+
+plt.figure(figsize=(8, 6))
+sns.heatmap(confusion_rf, annot=True, fmt='d', cmap='Blues', cbar=False)
+plt.xlabel('Predicted')
+plt.ylabel('True')
+plt.title('Confusion Matrix for RandomForest')
+plt.savefig('confusion_matrix_rf.png')  # Save the figure
+plt.show()
+
+# Plot confusion matrix for XGBoost
+plt.figure(figsize=(8, 6))
+sns.heatmap(confusion_xgb, annot=True, fmt='d', cmap='Blues', cbar=False)
+plt.xlabel('Predicted')
+plt.ylabel('True')
+plt.title('Confusion Matrix for XGBoost')
+plt.savefig('confusion_matrix_xgb.png')  # Save the figure
 plt.show()
